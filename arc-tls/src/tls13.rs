@@ -337,8 +337,8 @@ pub fn create_client_config(config: &Tls13Config) -> Result<ClientConfig, TlsErr
             subject: None,
             issuer: None,
             code: crate::error::ErrorCode::CertificateParseError,
-            context: Default::default(),
-            recovery: crate::error::RecoveryHint::Retry { max_attempts: 3, backoff_ms: 1000 },
+            context: Box::default(),
+            recovery: Box::new(crate::error::RecoveryHint::Retry { max_attempts: 3, backoff_ms: 1000 }),
         });
     }
 
@@ -352,11 +352,11 @@ pub fn create_client_config(config: &Tls13Config) -> Result<ClientConfig, TlsErr
             message: e.to_string(),
             field: Some("protocol_versions".to_string()),
             code: crate::error::ErrorCode::InvalidProtocolVersion,
-            context: Default::default(),
-            recovery: crate::error::RecoveryHint::Reconfigure {
+            context: Box::default(),
+            recovery: Box::new(crate::error::RecoveryHint::Reconfigure {
                 field: "protocol_versions".to_string(),
                 suggestion: "Use supported protocol versions (TLSv1.2, TLSv1.3)".to_string(),
-            },
+            }),
         })?;
 
     // Build with root certificates first, then configure client auth
@@ -374,11 +374,11 @@ pub fn create_client_config(config: &Tls13Config) -> Result<ClientConfig, TlsErr
                 subject: None,
                 issuer: None,
                 code: crate::error::ErrorCode::CertificateParseError,
-                context: Default::default(),
-                recovery: crate::error::RecoveryHint::Reconfigure {
+                context: Box::default(),
+                recovery: Box::new(crate::error::RecoveryHint::Reconfigure {
                     field: "client_cert".to_string(),
                     suggestion: "Ensure certificate and key are valid and match".to_string(),
-                },
+                }),
             })?
     } else {
         // No client auth
@@ -460,11 +460,11 @@ pub fn create_server_config(
             message: e.to_string(),
             field: Some("protocol_versions".to_string()),
             code: crate::error::ErrorCode::InvalidProtocolVersion,
-            context: Default::default(),
-            recovery: crate::error::RecoveryHint::Reconfigure {
+            context: Box::default(),
+            recovery: Box::new(crate::error::RecoveryHint::Reconfigure {
                 field: "protocol_versions".to_string(),
                 suggestion: "Use supported protocol versions (TLSv1.2, TLSv1.3)".to_string(),
-            },
+            }),
         })?;
 
     // Configure client verification based on mode
@@ -479,11 +479,11 @@ pub fn create_server_config(
                 message: "Client CA certificates required for mTLS".to_string(),
                 field: Some("client_ca_certs".to_string()),
                 code: crate::error::ErrorCode::MissingCertificate,
-                context: Default::default(),
-                recovery: crate::error::RecoveryHint::Reconfigure {
+                context: Box::default(),
+                recovery: Box::new(crate::error::RecoveryHint::Reconfigure {
                     field: "client_ca_certs".to_string(),
                     suggestion: "Provide CA certificates for client verification".to_string(),
-                },
+                }),
             })?;
 
             let verifier_builder = WebPkiClientVerifier::builder(Arc::new(client_roots));
@@ -493,16 +493,16 @@ pub fn create_server_config(
                     message: format!("Failed to build client verifier: {}", e),
                     field: Some("client_verification".to_string()),
                     code: crate::error::ErrorCode::InvalidConfig,
-                    context: Default::default(),
-                    recovery: crate::error::RecoveryHint::NoRecovery,
+                    context: Box::default(),
+                    recovery: Box::new(crate::error::RecoveryHint::NoRecovery),
                 })?
             } else {
                 verifier_builder.build().map_err(|e| TlsError::Config {
                     message: format!("Failed to build client verifier: {}", e),
                     field: Some("client_verification".to_string()),
                     code: crate::error::ErrorCode::InvalidConfig,
-                    context: Default::default(),
-                    recovery: crate::error::RecoveryHint::NoRecovery,
+                    context: Box::default(),
+                    recovery: Box::new(crate::error::RecoveryHint::NoRecovery),
                 })?
             };
 
@@ -564,11 +564,11 @@ fn get_crypto_provider(mode: TlsMode) -> Result<rustls::crypto::CryptoProvider, 
                     message: "AWS-LC provider lacks essential key exchange groups".to_string(),
                     field: Some("crypto_provider".to_string()),
                     code: crate::error::ErrorCode::InvalidConfig,
-                    context: Default::default(),
-                    recovery: crate::error::RecoveryHint::Reconfigure {
+                    context: Box::default(),
+                    recovery: Box::new(crate::error::RecoveryHint::Reconfigure {
                         field: "crypto_provider".to_string(),
                         suggestion: "Ensure AWS-LC supports X25519 and secp256r1".to_string(),
-                    },
+                    }),
                 });
             }
 
@@ -657,11 +657,11 @@ pub fn validate_cipher_suites(suites: &[SupportedCipherSuite]) -> Result<(), Tls
                 message: format!("Insecure or deprecated cipher suite: {:?}", suite),
                 field: Some("cipher_suites".to_string()),
                 code: crate::error::ErrorCode::InvalidConfig,
-                context: Default::default(),
-                recovery: crate::error::RecoveryHint::Reconfigure {
+                context: Box::default(),
+                recovery: Box::new(crate::error::RecoveryHint::Reconfigure {
                     field: "cipher_suites".to_string(),
                     suggestion: "Use only TLS 1.3 cipher suites: AES-256-GCM, ChaCha20-Poly1305, AES-128-GCM".to_string(),
-                },
+                }),
             });
         }
     }
@@ -690,11 +690,11 @@ pub fn verify_config(config: &Tls13Config) -> Result<(), TlsError> {
             message: "max_early_data_size must be set when early_data is enabled".to_string(),
             field: Some("max_early_data_size".to_string()),
             code: crate::error::ErrorCode::InvalidConfig,
-            context: Default::default(),
-            recovery: crate::error::RecoveryHint::Reconfigure {
+            context: Box::default(),
+            recovery: Box::new(crate::error::RecoveryHint::Reconfigure {
                 field: "max_early_data_size".to_string(),
                 suggestion: "Set max_early_data_size to a positive value".to_string(),
-            },
+            }),
         });
     }
 

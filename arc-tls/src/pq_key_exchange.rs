@@ -247,8 +247,8 @@ pub fn perform_hybrid_keygen<R: Rng + CryptoRng>(
         method: "X25519MLKEM768".to_string(),
         operation: Some("keygen".to_string()),
         code: crate::error::ErrorCode::KeyExchangeFailed,
-        context: Default::default(),
-        recovery: crate::error::RecoveryHint::NoRecovery,
+        context: Box::default(),
+        recovery: Box::new(crate::error::RecoveryHint::NoRecovery),
     })
 }
 
@@ -267,8 +267,8 @@ pub fn perform_hybrid_encapsulate<R: Rng + CryptoRng>(
         method: "X25519MLKEM768".to_string(),
         operation: Some("encapsulate".to_string()),
         code: crate::error::ErrorCode::EncapsulationFailed,
-        context: Default::default(),
-        recovery: crate::error::RecoveryHint::NoRecovery,
+        context: Box::default(),
+        recovery: Box::new(crate::error::RecoveryHint::NoRecovery),
     })
 }
 
@@ -287,8 +287,8 @@ pub fn perform_hybrid_decapsulate_secure(
         method: "X25519MLKEM768".to_string(),
         operation: Some("decapsulate".to_string()),
         code: crate::error::ErrorCode::DecapsulationFailed,
-        context: Default::default(),
-        recovery: crate::error::RecoveryHint::NoRecovery,
+        context: Box::default(),
+        recovery: Box::new(crate::error::RecoveryHint::NoRecovery),
     })?;
     Ok(SecureSharedSecret::new(secret))
 }

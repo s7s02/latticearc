@@ -414,8 +414,8 @@ where
                     message: format!("Circuit breaker failure: {}", error_info),
                     field: Some("circuit_breaker".to_string()),
                     code: ErrorCode::InvalidConfig,
-                    context: Default::default(),
-                    recovery: RecoveryHint::Retry { max_attempts: 3, backoff_ms: 1000 },
+                    context: Box::default(),
+                    recovery: Box::new(RecoveryHint::Retry { max_attempts: 3, backoff_ms: 1000 }),
                 });
 
                 if !policy.should_retry(&err, attempt) {
@@ -439,8 +439,8 @@ where
     Err(last_error.unwrap_or_else(|| TlsError::Internal {
         message: "Operation failed with unknown error".to_string(),
         code: ErrorCode::InternalError,
-        context: Default::default(),
-        recovery: RecoveryHint::NoRecovery,
+        context: Box::default(),
+        recovery: Box::new(RecoveryHint::NoRecovery),
     }))
 }
 
@@ -464,8 +464,8 @@ where
         return Err(TlsError::Internal {
             message: format!("Circuit breaker is open, {} operation blocked", operation_name),
             code: ErrorCode::TooManyConnections,
-            context: Default::default(),
-            recovery: RecoveryHint::Retry { max_attempts: 1, backoff_ms: 5000 },
+            context: Box::default(),
+            recovery: Box::new(RecoveryHint::Retry { max_attempts: 1, backoff_ms: 5000 }),
         });
     }
 

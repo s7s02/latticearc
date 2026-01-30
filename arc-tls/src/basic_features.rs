@@ -33,8 +33,8 @@ pub fn load_certificates(path: &str) -> Result<Vec<CertificateDer<'static>>, Tls
         subject: None,
         issuer: None,
         code: crate::error::ErrorCode::CertificateParseError,
-        context: Default::default(),
-        recovery: crate::error::RecoveryHint::Retry { max_attempts: 3, backoff_ms: 1000 },
+        context: Box::default(),
+        recovery: Box::new(crate::error::RecoveryHint::Retry { max_attempts: 3, backoff_ms: 1000 }),
     })?;
     let mut reader = BufReader::new(file);
 
@@ -46,8 +46,8 @@ pub fn load_certificates(path: &str) -> Result<Vec<CertificateDer<'static>>, Tls
                 subject: None,
                 issuer: None,
                 code: crate::error::ErrorCode::CertificateParseError,
-                context: Default::default(),
-                recovery: crate::error::RecoveryHint::Retry { max_attempts: 3, backoff_ms: 1000 },
+                context: Box::default(),
+                recovery: Box::new(crate::error::RecoveryHint::Retry { max_attempts: 3, backoff_ms: 1000 }),
             })
         })
         .collect::<Result<Vec<_>, _>>()?;
@@ -58,8 +58,8 @@ pub fn load_certificates(path: &str) -> Result<Vec<CertificateDer<'static>>, Tls
             subject: None,
             issuer: None,
             code: crate::error::ErrorCode::CertificateParseError,
-            context: Default::default(),
-            recovery: crate::error::RecoveryHint::NoRecovery,
+            context: Box::default(),
+            recovery: Box::new(crate::error::RecoveryHint::NoRecovery),
         });
     }
 
@@ -174,8 +174,8 @@ pub fn load_private_key_secure(path: &str) -> Result<SecurePrivateKey, TlsError>
         subject: None,
         issuer: None,
         code: crate::error::ErrorCode::MissingPrivateKey,
-        context: Default::default(),
-        recovery: crate::error::RecoveryHint::Retry { max_attempts: 3, backoff_ms: 1000 },
+        context: Box::default(),
+        recovery: Box::new(crate::error::RecoveryHint::Retry { max_attempts: 3, backoff_ms: 1000 }),
     })?;
     let mut reader = BufReader::new(file);
 
@@ -185,8 +185,8 @@ pub fn load_private_key_secure(path: &str) -> Result<SecurePrivateKey, TlsError>
         subject: None,
         issuer: None,
         code: crate::error::ErrorCode::MissingPrivateKey,
-        context: Default::default(),
-        recovery: crate::error::RecoveryHint::Retry { max_attempts: 3, backoff_ms: 1000 },
+        context: Box::default(),
+        recovery: Box::new(crate::error::RecoveryHint::Retry { max_attempts: 3, backoff_ms: 1000 }),
     })?;
 
     Ok(SecurePrivateKey::new(key))
@@ -219,8 +219,8 @@ pub fn load_private_key(path: &str) -> Result<PrivateKeyDer<'static>, TlsError> 
         subject: None,
         issuer: None,
         code: crate::error::ErrorCode::MissingPrivateKey,
-        context: Default::default(),
-        recovery: crate::error::RecoveryHint::Retry { max_attempts: 3, backoff_ms: 1000 },
+        context: Box::default(),
+        recovery: Box::new(crate::error::RecoveryHint::Retry { max_attempts: 3, backoff_ms: 1000 }),
     })?;
     let mut reader = BufReader::new(file);
 
@@ -230,8 +230,8 @@ pub fn load_private_key(path: &str) -> Result<PrivateKeyDer<'static>, TlsError> 
         subject: None,
         issuer: None,
         code: crate::error::ErrorCode::MissingPrivateKey,
-        context: Default::default(),
-        recovery: crate::error::RecoveryHint::Retry { max_attempts: 3, backoff_ms: 1000 },
+        context: Box::default(),
+        recovery: Box::new(crate::error::RecoveryHint::Retry { max_attempts: 3, backoff_ms: 1000 }),
     })
 }
 
@@ -346,8 +346,8 @@ pub fn create_server_acceptor(
                 subject: None,
                 issuer: None,
                 code: crate::error::ErrorCode::CertificateParseError,
-                context: Default::default(),
-                recovery: crate::error::RecoveryHint::NoRecovery,
+                context: Box::default(),
+                recovery: Box::new(crate::error::RecoveryHint::NoRecovery),
             })?;
         }
         tls13_config.client_ca_roots = Some(root_store);
@@ -395,8 +395,8 @@ pub async fn tls_connect(
             message: "Invalid domain name".to_string(),
             field: Some("domain".to_string()),
             code: crate::error::ErrorCode::InvalidConfig,
-            context: Default::default(),
-            recovery: crate::error::RecoveryHint::NoRecovery,
+            context: Box::default(),
+            recovery: Box::new(crate::error::RecoveryHint::NoRecovery),
         })?;
     let server_name = rustls_pki_types::ServerName::DnsName(dns_name);
 

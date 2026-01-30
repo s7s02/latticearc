@@ -82,8 +82,8 @@ fn test_certificate_error_with_recovery() {
         subject: Some("test.example.com".to_string()),
         issuer: Some("Test CA".to_string()),
         code: ErrorCode::CertificateExpired,
-        context,
-        recovery: RecoveryHint::VerifyCertificates,
+        context: Box::new(context),
+        recovery: Box::new(RecoveryHint::VerifyCertificates),
     };
 
     assert_eq!(err.code(), ErrorCode::CertificateExpired);
@@ -102,8 +102,8 @@ fn test_handshake_error_with_retry() {
         message: "Handshake failed".to_string(),
         state: "ServerHello".to_string(),
         code: ErrorCode::HandshakeFailed,
-        context,
-        recovery: RecoveryHint::Retry { max_attempts: 3, backoff_ms: 1000 },
+        context: Box::new(context),
+        recovery: Box::new(RecoveryHint::Retry { max_attempts: 3, backoff_ms: 1000 }),
     };
 
     assert_eq!(err.code(), ErrorCode::HandshakeFailed);
@@ -120,8 +120,8 @@ fn test_pq_not_available_with_fallback() {
     let err = TlsError::PqNotAvailable {
         message: "PQ not available".to_string(),
         code: ErrorCode::PqNotAvailable,
-        context,
-        recovery: RecoveryHint::Fallback { description: "Fall back to classical".to_string() },
+        context: Box::new(context),
+        recovery: Box::new(RecoveryHint::Fallback { description: "Fall back to classical".to_string() }),
     };
 
     assert_eq!(err.code(), ErrorCode::PqNotAvailable);
@@ -139,8 +139,8 @@ fn test_unrecoverable_error() {
     let err = TlsError::Internal {
         message: "Internal error".to_string(),
         code: ErrorCode::InternalError,
-        context,
-        recovery: RecoveryHint::NoRecovery,
+        context: Box::new(context),
+        recovery: Box::new(RecoveryHint::NoRecovery),
     };
 
     assert!(!err.is_recoverable());
@@ -278,8 +278,8 @@ fn test_fallback_strategy_hybrid_to_classical() {
     let err = TlsError::PqNotAvailable {
         message: "PQ not available".to_string(),
         code: ErrorCode::PqNotAvailable,
-        context,
-        recovery: RecoveryHint::Fallback { description: "Fallback".to_string() },
+        context: Box::new(context),
+        recovery: Box::new(RecoveryHint::Fallback { description: "Fallback".to_string() }),
     };
 
     assert!(strategy.should_fallback(&err));
@@ -428,7 +428,7 @@ fn create_dummy_error() -> TlsError {
     TlsError::Internal {
         message: "Test error".to_string(),
         code: ErrorCode::InternalError,
-        context,
-        recovery: RecoveryHint::NoRecovery,
+        context: Box::new(context),
+        recovery: Box::new(RecoveryHint::NoRecovery),
     }
 }

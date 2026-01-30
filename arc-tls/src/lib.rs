@@ -621,15 +621,15 @@ impl TlsConfig {
                     ),
                     field: Some("protocol_version".to_string()),
                     code: ErrorCode::InvalidProtocolVersion,
-                    context: ErrorContext {
+                    context: Box::new(ErrorContext {
                         code: ErrorCode::InvalidProtocolVersion,
                         phase: OperationPhase::Initialization,
                         ..Default::default()
-                    },
-                    recovery: RecoveryHint::Reconfigure {
+                    }),
+                    recovery: Box::new(RecoveryHint::Reconfigure {
                         field: "min_protocol_version / max_protocol_version".to_string(),
                         suggestion: "Use TLSv1_2 or TLSv1_3 as version bounds".to_string(),
-                    },
+                    }),
                 });
             }
         }

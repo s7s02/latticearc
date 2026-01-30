@@ -367,10 +367,10 @@ pub enum TlsError {
         source: Option<Box<dyn std::error::Error + Send + Sync>>,
         /// Error code for classification.
         code: ErrorCode,
-        /// Detailed error context.
-        context: ErrorContext,
+        /// Detailed error context (boxed to reduce enum size).
+        context: Box<ErrorContext>,
         /// Recovery hint for handling.
-        recovery: RecoveryHint,
+        recovery: Box<RecoveryHint>,
     },
 
     /// TLS protocol error
@@ -380,10 +380,10 @@ pub enum TlsError {
         message: String,
         /// Error code for classification.
         code: ErrorCode,
-        /// Detailed error context.
-        context: ErrorContext,
+        /// Detailed error context (boxed to reduce enum size).
+        context: Box<ErrorContext>,
         /// Recovery hint for handling.
-        recovery: RecoveryHint,
+        recovery: Box<RecoveryHint>,
     },
 
     /// TLS handshake error
@@ -395,10 +395,10 @@ pub enum TlsError {
         state: String,
         /// Error code for classification.
         code: ErrorCode,
-        /// Detailed error context.
-        context: ErrorContext,
+        /// Detailed error context (boxed to reduce enum size).
+        context: Box<ErrorContext>,
         /// Recovery hint for handling.
-        recovery: RecoveryHint,
+        recovery: Box<RecoveryHint>,
     },
 
     /// Certificate error
@@ -412,10 +412,10 @@ pub enum TlsError {
         issuer: Option<String>,
         /// Error code for classification.
         code: ErrorCode,
-        /// Detailed error context.
-        context: ErrorContext,
+        /// Detailed error context (boxed to reduce enum size).
+        context: Box<ErrorContext>,
         /// Recovery hint for handling.
-        recovery: RecoveryHint,
+        recovery: Box<RecoveryHint>,
     },
 
     /// Key exchange error
@@ -429,10 +429,10 @@ pub enum TlsError {
         operation: Option<String>,
         /// Error code for classification.
         code: ErrorCode,
-        /// Detailed error context.
-        context: ErrorContext,
+        /// Detailed error context (boxed to reduce enum size).
+        context: Box<ErrorContext>,
         /// Recovery hint for handling.
-        recovery: RecoveryHint,
+        recovery: Box<RecoveryHint>,
     },
 
     /// Configuration error
@@ -444,10 +444,10 @@ pub enum TlsError {
         field: Option<String>,
         /// Error code for classification.
         code: ErrorCode,
-        /// Detailed error context.
-        context: ErrorContext,
+        /// Detailed error context (boxed to reduce enum size).
+        context: Box<ErrorContext>,
         /// Recovery hint for handling.
-        recovery: RecoveryHint,
+        recovery: Box<RecoveryHint>,
     },
 
     /// Unsupported cipher suite
@@ -457,10 +457,10 @@ pub enum TlsError {
         cipher_suite: String,
         /// Error code for classification.
         code: ErrorCode,
-        /// Detailed error context.
-        context: ErrorContext,
+        /// Detailed error context (boxed to reduce enum size).
+        context: Box<ErrorContext>,
         /// Recovery hint for handling.
-        recovery: RecoveryHint,
+        recovery: Box<RecoveryHint>,
     },
 
     /// Unsupported protocol version
@@ -470,10 +470,10 @@ pub enum TlsError {
         version: String,
         /// Error code for classification.
         code: ErrorCode,
-        /// Detailed error context.
-        context: ErrorContext,
+        /// Detailed error context (boxed to reduce enum size).
+        context: Box<ErrorContext>,
         /// Recovery hint for handling.
-        recovery: RecoveryHint,
+        recovery: Box<RecoveryHint>,
     },
 
     /// Post-quantum key exchange not available
@@ -483,10 +483,10 @@ pub enum TlsError {
         message: String,
         /// Error code for classification.
         code: ErrorCode,
-        /// Detailed error context.
-        context: ErrorContext,
+        /// Detailed error context (boxed to reduce enum size).
+        context: Box<ErrorContext>,
         /// Recovery hint for handling.
-        recovery: RecoveryHint,
+        recovery: Box<RecoveryHint>,
     },
 
     /// Hybrid KEM error
@@ -498,10 +498,10 @@ pub enum TlsError {
         component: String,
         /// Error code for classification.
         code: ErrorCode,
-        /// Detailed error context.
-        context: ErrorContext,
+        /// Detailed error context (boxed to reduce enum size).
+        context: Box<ErrorContext>,
         /// Recovery hint for handling.
-        recovery: RecoveryHint,
+        recovery: Box<RecoveryHint>,
     },
 
     /// Invalid key material
@@ -513,10 +513,10 @@ pub enum TlsError {
         key_type: String,
         /// Error code for classification.
         code: ErrorCode,
-        /// Detailed error context.
-        context: ErrorContext,
+        /// Detailed error context (boxed to reduce enum size).
+        context: Box<ErrorContext>,
         /// Recovery hint for handling.
-        recovery: RecoveryHint,
+        recovery: Box<RecoveryHint>,
     },
 
     /// Crypto provider initialization error
@@ -528,10 +528,10 @@ pub enum TlsError {
         provider: String,
         /// Error code for classification.
         code: ErrorCode,
-        /// Detailed error context.
-        context: ErrorContext,
+        /// Detailed error context (boxed to reduce enum size).
+        context: Box<ErrorContext>,
         /// Recovery hint for handling.
-        recovery: RecoveryHint,
+        recovery: Box<RecoveryHint>,
     },
 
     /// Resource error
@@ -543,10 +543,10 @@ pub enum TlsError {
         resource_type: String,
         /// Error code for classification.
         code: ErrorCode,
-        /// Detailed error context.
-        context: ErrorContext,
+        /// Detailed error context (boxed to reduce enum size).
+        context: Box<ErrorContext>,
         /// Recovery hint for handling.
-        recovery: RecoveryHint,
+        recovery: Box<RecoveryHint>,
     },
 
     /// Internal error
@@ -556,10 +556,10 @@ pub enum TlsError {
         message: String,
         /// Error code for classification.
         code: ErrorCode,
-        /// Detailed error context.
-        context: ErrorContext,
+        /// Detailed error context (boxed to reduce enum size).
+        context: Box<ErrorContext>,
         /// Recovery hint for handling.
-        recovery: RecoveryHint,
+        recovery: Box<RecoveryHint>,
     },
 }
 
@@ -588,41 +588,27 @@ impl TlsError {
     /// Get error severity
     #[must_use]
     pub fn severity(&self) -> ErrorSeverity {
-        match self {
-            TlsError::Io { context, .. } => context.severity,
-            TlsError::Tls { context, .. } => context.severity,
-            TlsError::Handshake { context, .. } => context.severity,
-            TlsError::Certificate { context, .. } => context.severity,
-            TlsError::KeyExchange { context, .. } => context.severity,
-            TlsError::Config { context, .. } => context.severity,
-            TlsError::UnsupportedCipherSuite { context, .. } => context.severity,
-            TlsError::UnsupportedVersion { context, .. } => context.severity,
-            TlsError::PqNotAvailable { context, .. } => context.severity,
-            TlsError::HybridKem { context, .. } => context.severity,
-            TlsError::InvalidKeyMaterial { context, .. } => context.severity,
-            TlsError::CryptoProvider { context, .. } => context.severity,
-            TlsError::Resource { context, .. } => context.severity,
-            TlsError::Internal { context, .. } => context.severity,
-        }
+        self.context().severity
     }
 
     /// Get error context
     #[must_use]
     pub fn context(&self) -> &ErrorContext {
         match self {
-            TlsError::Io { context, .. } => context,
-            TlsError::Tls { context, .. } => context,
-            TlsError::Certificate { context, .. } => context,
-            TlsError::KeyExchange { context, .. } => context,
-            TlsError::CryptoProvider { context, .. } => context,
-            TlsError::Config { context, .. } => context,
-            // Recovery and Context variants don't exist in current TlsError
-            _ => {
-                // For variants without context, return a static empty context
-                static EMPTY_CONTEXT: std::sync::LazyLock<ErrorContext> =
-                    std::sync::LazyLock::new(ErrorContext::default);
-                &EMPTY_CONTEXT
-            }
+            TlsError::Io { context, .. }
+            | TlsError::Tls { context, .. }
+            | TlsError::Handshake { context, .. }
+            | TlsError::Certificate { context, .. }
+            | TlsError::KeyExchange { context, .. }
+            | TlsError::Config { context, .. }
+            | TlsError::UnsupportedCipherSuite { context, .. }
+            | TlsError::UnsupportedVersion { context, .. }
+            | TlsError::PqNotAvailable { context, .. }
+            | TlsError::HybridKem { context, .. }
+            | TlsError::InvalidKeyMaterial { context, .. }
+            | TlsError::CryptoProvider { context, .. }
+            | TlsError::Resource { context, .. }
+            | TlsError::Internal { context, .. } => context,
         }
     }
 
@@ -703,8 +689,8 @@ impl From<std::io::Error> for TlsError {
             message: err.to_string(),
             source: Some(Box::new(err)),
             code,
-            context,
-            recovery,
+            context: Box::new(context),
+            recovery: Box::new(recovery),
         }
     }
 }
@@ -821,7 +807,7 @@ impl From<rustls::Error> for TlsError {
         context.phase = phase;
         context.extra.insert("rustls_error".to_string(), err.to_string());
 
-        TlsError::Tls { message: err.to_string(), code, context, recovery }
+        TlsError::Tls { message: err.to_string(), code, context: Box::new(context), recovery: Box::new(recovery) }
     }
 }
 
@@ -838,10 +824,10 @@ impl From<arc_hybrid::kem::HybridKemError> for TlsError {
             message: err.to_string(),
             component: "X25519MLKEM768".to_string(),
             code: ErrorCode::HybridKemFailed,
-            context,
-            recovery: RecoveryHint::Fallback {
+            context: Box::new(context),
+            recovery: Box::new(RecoveryHint::Fallback {
                 description: "Consider using classical ECDHE only".to_string(),
-            },
+            }),
         }
     }
 }
@@ -888,8 +874,8 @@ mod tests {
         let err = TlsError::PqNotAvailable {
             message: "PQ not available".to_string(),
             code: ErrorCode::PqNotAvailable,
-            context,
-            recovery: RecoveryHint::Fallback { description: "Fall back to classical".to_string() },
+            context: Box::new(context),
+            recovery: Box::new(RecoveryHint::Fallback { description: "Fall back to classical".to_string() }),
         };
 
         assert!(err.supports_fallback());
