@@ -25,15 +25,10 @@ LatticeArc defaults to **hybrid cryptography** (PQ + classical) as recommended b
 
 ```mermaid
 flowchart LR
-    P[/**Plaintext**/]
-
-    subgraph hybrid [" Hybrid Encryption "]
-        direction LR
-        KEM[/**ML-KEM-768**/<br/>quantum-safe]
-        AES[/**AES-256-GCM**/<br/>time-tested]
-    end
-
-    OUT[/**Protected Output**/]
+    P[Plaintext]
+    KEM[ML-KEM-768]
+    AES[AES-256-GCM]
+    OUT[Protected Output]
 
     P --> KEM
     P --> AES
@@ -44,7 +39,6 @@ flowchart LR
     style KEM fill:#8b5cf6,stroke:#6d28d9,color:#fff
     style AES fill:#f59e0b,stroke:#d97706,color:#fff
     style OUT fill:#10b981,stroke:#059669,color:#fff
-    style hybrid fill:#f1f5f9,stroke:#64748b
 ```
 
 > **Defense in depth**: If *either* algorithm remains secure, your data is protected.
@@ -83,21 +77,14 @@ LatticeArc automatically selects algorithms based on your configuration:
 
 ```mermaid
 flowchart TB
-    CONFIG[/**CryptoConfig::new**/]
-
-    subgraph options [" Configuration Options "]
-        UC[.use_case]
-        SL[.security_level]
-        DEF[defaults]
-    end
-
-    ENGINE[/**CryptoPolicyEngine**/]
-
-    subgraph schemes [" Selected Scheme "]
-        LOW[ML-KEM-512 + AES<br/>Low]
-        HIGH[ML-KEM-768 + AES<br/>High]
-        MAX[ML-KEM-1024 + AES<br/>Maximum]
-    end
+    CONFIG[CryptoConfig::new]
+    UC[.use_case]
+    SL[.security_level]
+    DEF[defaults]
+    ENGINE[CryptoPolicyEngine]
+    LOW[ML-KEM-512 + AES]
+    HIGH[ML-KEM-768 + AES]
+    MAX[ML-KEM-1024 + AES]
 
     CONFIG --> UC
     CONFIG --> SL
@@ -111,14 +98,12 @@ flowchart TB
 
     style CONFIG fill:#3b82f6,stroke:#1d4ed8,color:#fff
     style ENGINE fill:#8b5cf6,stroke:#6d28d9,color:#fff
-    style UC fill:#f1f5f9,stroke:#64748b
-    style SL fill:#f1f5f9,stroke:#64748b
-    style DEF fill:#f1f5f9,stroke:#64748b
+    style UC fill:#e2e8f0,stroke:#64748b
+    style SL fill:#e2e8f0,stroke:#64748b
+    style DEF fill:#e2e8f0,stroke:#64748b
     style LOW fill:#fef3c7,stroke:#d97706
     style HIGH fill:#d1fae5,stroke:#059669
     style MAX fill:#10b981,stroke:#059669,color:#fff
-    style options fill:#fff,stroke:#e2e8f0
-    style schemes fill:#fff,stroke:#e2e8f0
 ```
 
 ### By Use Case (Recommended)
@@ -159,29 +144,21 @@ For enterprise security, use verified sessions that enforce authentication befor
 
 ```mermaid
 sequenceDiagram
-    box rgb(241, 245, 249) Client Application
-        participant C as Client
-    end
-    box rgb(243, 232, 255) Zero Trust Layer
-        participant V as Verifier
-    end
+    participant C as Client
+    participant V as Verifier
 
-    rect rgb(219, 234, 254)
-        Note over C,V: Session Establishment
-        V->>C: challenge
-        C->>V: proof (signed)
-        V->>V: verify proof
-        V-->>C: VerifiedSession ✓
-    end
+    Note over C,V: 1. Session Establishment
+    V->>C: challenge
+    C->>V: proof (signed)
+    V->>V: verify proof
+    V-->>C: VerifiedSession
 
-    rect rgb(220, 252, 231)
-        Note over C,V: Crypto Operation
-        C->>C: encrypt(data, config.session(&sess))
-        alt Session Valid
-            C->>C: ✓ Proceed
-        else Session Expired
-            C-->>C: ✗ Error
-        end
+    Note over C,V: 2. Crypto Operation
+    C->>C: encrypt(data, config.session)
+    alt Session Valid
+        C->>C: Proceed
+    else Session Expired
+        C-->>C: Error
     end
 ```
 
