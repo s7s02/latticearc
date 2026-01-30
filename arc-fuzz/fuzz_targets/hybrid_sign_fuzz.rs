@@ -6,7 +6,7 @@
 //! Tests that sign/verify roundtrip correctly with arbitrary message data.
 
 use libfuzzer_sys::fuzz_target;
-use arc_core::{sign, verify};
+use arc_core::{sign, verify, CryptoConfig};
 
 fuzz_target!(|data: &[u8]| {
     // Need at least some data to sign
@@ -14,10 +14,13 @@ fuzz_target!(|data: &[u8]| {
         return;
     }
 
+    // Use default crypto config for fuzzing
+    let config = CryptoConfig::default();
+
     // Test signing (generates keypair internally)
-    if let Ok(signed) = sign(data) {
+    if let Ok(signed) = sign(data, config.clone()) {
         // Test verification
-        if let Ok(valid) = verify(&signed) {
+        if let Ok(valid) = verify(&signed, config) {
             // Signature of correct message should verify
             assert!(valid);
         }
