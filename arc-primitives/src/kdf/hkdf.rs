@@ -186,10 +186,7 @@ pub fn hkdf_expand(prk: &[u8; 32], info: Option<&[u8]>, length: usize) -> Result
         t_prev = t_i.to_vec();
     }
 
-    Ok(HkdfResult {
-        key: output,
-        key_length: length,
-    })
+    Ok(HkdfResult { key: output, key_length: length })
 }
 
 /// Full HKDF: Extract then expand
@@ -428,17 +425,11 @@ mod tests {
 
         let mut result = hkdf(ikm, Some(salt), None, 32).unwrap();
 
-        assert!(
-            !result.key.iter().all(|&b| b == 0),
-            "HKDF result should contain non-zero data"
-        );
+        assert!(!result.key.iter().all(|&b| b == 0), "HKDF result should contain non-zero data");
 
         result.zeroize();
 
-        assert!(
-            result.key.iter().all(|&b| b == 0),
-            "HKDF result should be zeroized"
-        );
+        assert!(result.key.iter().all(|&b| b == 0), "HKDF result should be zeroized");
     }
 
     #[test]
@@ -446,10 +437,7 @@ mod tests {
         let mut ikm = vec![0x77; 64];
         let salt = b"test salt";
 
-        assert!(
-            !ikm.iter().all(|&b| b == 0),
-            "IKM should contain non-zero data"
-        );
+        assert!(!ikm.iter().all(|&b| b == 0), "IKM should contain non-zero data");
 
         hkdf(&ikm, Some(salt), None, 32).unwrap();
 
@@ -463,10 +451,7 @@ mod tests {
         let ikm = b"test ikm";
         let mut salt = vec![0x88; 32];
 
-        assert!(
-            !salt.iter().all(|&b| b == 0),
-            "Salt should contain non-zero data"
-        );
+        assert!(!salt.iter().all(|&b| b == 0), "Salt should contain non-zero data");
 
         hkdf(ikm, Some(&salt), None, 32).unwrap();
 
@@ -582,9 +567,6 @@ mod tests {
             0xec, 0xc4, 0xc5, 0xbf, 0x34, 0x00, 0x72, 0x08, 0xd5, 0xb8, 0x87, 0x18, 0x58, 0x65,
         ];
 
-        assert_eq!(
-            okm.key, expected_okm,
-            "HKDF must use aws-lc-rs implementation correctly"
-        );
+        assert_eq!(okm.key, expected_okm, "HKDF must use aws-lc-rs implementation correctly");
     }
 }

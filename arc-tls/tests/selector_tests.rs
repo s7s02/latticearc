@@ -357,10 +357,8 @@ fn test_tls_config_with_security_level_low() {
 
 #[test]
 fn test_tls_config_builder_chain() {
-    let config = TlsConfig::new()
-        .use_case(TlsUseCase::FinancialServices)
-        .with_tracing()
-        .with_fallback(true);
+    let config =
+        TlsConfig::new().use_case(TlsUseCase::FinancialServices).with_tracing().with_fallback(true);
 
     assert_eq!(config.mode, TlsMode::Hybrid);
     assert!(config.enable_tracing);

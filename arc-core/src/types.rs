@@ -396,10 +396,7 @@ impl<'a> CryptoConfig<'a> {
     /// Creates new configuration with defaults (High security, no session).
     #[must_use]
     pub fn new() -> Self {
-        Self {
-            session: None,
-            selection: AlgorithmSelection::default(),
-        }
+        Self { session: None, selection: AlgorithmSelection::default() }
     }
 
     /// Sets the Zero Trust verified session.
@@ -456,10 +453,6 @@ impl<'a> CryptoConfig<'a> {
     ///
     /// Returns `CoreError::SessionExpired` if the session has expired.
     pub fn validate(&self) -> crate::error::Result<()> {
-        if let Some(session) = self.session {
-            session.verify_valid()
-        } else {
-            Ok(())
-        }
+        if let Some(session) = self.session { session.verify_valid() } else { Ok(()) }
     }
 }

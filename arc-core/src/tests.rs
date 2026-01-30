@@ -17,8 +17,8 @@ fn test_basic_encryption() {
             let key = vec![1u8; 32];
 
             // Test symmetric encryption with AES-256-GCM
-            let encrypted = encrypt_aes_gcm_unverified(data, &key)
-                .expect("Encryption should succeed");
+            let encrypted =
+                encrypt_aes_gcm_unverified(data, &key).expect("Encryption should succeed");
 
             // Test decryption
             let decrypted =
@@ -44,7 +44,8 @@ fn test_basic_signing() {
             let signed = sign(message, CryptoConfig::new()).expect("Signing should succeed");
 
             // Test verification
-            let verified = verify(&signed, CryptoConfig::new()).expect("Verification should succeed");
+            let verified =
+                verify(&signed, CryptoConfig::new()).expect("Verification should succeed");
 
             assert!(verified, "Signature verification should succeed");
         })
@@ -148,12 +149,12 @@ fn test_session_verified_encryption() {
             // Test symmetric encryption with AES-256-GCM
             // Note: The unified encrypt() API with CryptoConfig defaults to hybrid PQ encryption
             // which requires ML-KEM public keys. For symmetric encryption, use explicit functions.
-            let encrypted = encrypt_aes_gcm_unverified(data, &key)
-                .expect("Encryption should succeed");
+            let encrypted =
+                encrypt_aes_gcm_unverified(data, &key).expect("Encryption should succeed");
 
             // Test decryption
-            let decrypted = decrypt_aes_gcm_unverified(&encrypted, &key)
-                .expect("Decryption should succeed");
+            let decrypted =
+                decrypt_aes_gcm_unverified(&encrypted, &key).expect("Decryption should succeed");
 
             assert_eq!(data, decrypted.as_slice());
         })

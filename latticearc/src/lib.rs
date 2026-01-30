@@ -276,33 +276,31 @@ pub use arc_core::{
 
 #[allow(deprecated)]
 pub use arc_core::{
+    // AES-GCM
+    decrypt_aes_gcm_unverified,
+    decrypt_aes_gcm_with_config_unverified,
+    // Hybrid
+    decrypt_hybrid_unverified,
+    decrypt_hybrid_with_config_unverified,
+    // PQ KEM
+    decrypt_pq_ml_kem_unverified,
+    decrypt_pq_ml_kem_with_config_unverified,
     // Hashing
     derive_key_unverified,
     derive_key_with_config_unverified,
+    encrypt_aes_gcm_unverified,
+    encrypt_aes_gcm_with_config_unverified,
+    encrypt_hybrid_unverified,
+    encrypt_hybrid_with_config_unverified,
+    encrypt_pq_ml_kem_unverified,
+    encrypt_pq_ml_kem_with_config_unverified,
     hmac_check_unverified,
     hmac_check_with_config_unverified,
     hmac_unverified,
     hmac_with_config_unverified,
-    // AES-GCM
-    decrypt_aes_gcm_unverified,
-    decrypt_aes_gcm_with_config_unverified,
-    encrypt_aes_gcm_unverified,
-    encrypt_aes_gcm_with_config_unverified,
-    // Hybrid
-    decrypt_hybrid_unverified,
-    decrypt_hybrid_with_config_unverified,
-    encrypt_hybrid_unverified,
-    encrypt_hybrid_with_config_unverified,
     // Ed25519
     sign_ed25519_unverified,
     sign_ed25519_with_config_unverified,
-    verify_ed25519_unverified,
-    verify_ed25519_with_config_unverified,
-    // PQ KEM
-    decrypt_pq_ml_kem_unverified,
-    decrypt_pq_ml_kem_with_config_unverified,
-    encrypt_pq_ml_kem_unverified,
-    encrypt_pq_ml_kem_with_config_unverified,
     // PQ Signatures
     sign_pq_fn_dsa_unverified,
     sign_pq_fn_dsa_with_config_unverified,
@@ -310,6 +308,8 @@ pub use arc_core::{
     sign_pq_ml_dsa_with_config_unverified,
     sign_pq_slh_dsa_unverified,
     sign_pq_slh_dsa_with_config_unverified,
+    verify_ed25519_unverified,
+    verify_ed25519_with_config_unverified,
     verify_pq_fn_dsa_unverified,
     verify_pq_fn_dsa_with_config_unverified,
     verify_pq_ml_dsa_unverified,

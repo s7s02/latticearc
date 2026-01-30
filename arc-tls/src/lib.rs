@@ -562,7 +562,6 @@ impl TlsConfig {
         self
     }
 
-
     /// Validate the TLS configuration
     ///
     /// Checks for configuration errors that would cause unexpected behavior

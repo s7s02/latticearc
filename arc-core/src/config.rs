@@ -583,9 +583,7 @@ impl UseCaseConfig {
             UseCase::SecureMessaging | UseCase::ApiSecurity => {
                 CoreConfig::new().with_performance_preference(PerformancePreference::Speed)
             }
-            UseCase::EmailEncryption => {
-                CoreConfig::new().with_security_level(SecurityLevel::High)
-            }
+            UseCase::EmailEncryption => CoreConfig::new().with_security_level(SecurityLevel::High),
             UseCase::VpnTunnel => CoreConfig::new()
                 .with_performance_preference(PerformancePreference::Speed)
                 .with_hardware_acceleration(true),
@@ -602,17 +600,18 @@ impl UseCaseConfig {
             UseCase::Authentication | UseCase::DigitalCertificate => {
                 CoreConfig::new().with_security_level(SecurityLevel::Maximum)
             }
-            UseCase::SessionToken => CoreConfig::new()
-                .with_performance_preference(PerformancePreference::Speed),
-            UseCase::KeyExchange => CoreConfig::new()
-                .with_security_level(SecurityLevel::Maximum),
+            UseCase::SessionToken => {
+                CoreConfig::new().with_performance_preference(PerformancePreference::Speed)
+            }
+            UseCase::KeyExchange => CoreConfig::new().with_security_level(SecurityLevel::Maximum),
 
             // Financial & Legal: Highest security
             UseCase::FinancialTransactions | UseCase::LegalDocuments => {
                 CoreConfig::new().with_security_level(SecurityLevel::Maximum)
             }
-            UseCase::BlockchainTransaction => CoreConfig::new()
-                .with_performance_preference(PerformancePreference::Balanced),
+            UseCase::BlockchainTransaction => {
+                CoreConfig::new().with_performance_preference(PerformancePreference::Balanced)
+            }
 
             // Regulated Industries: Maximum security + compliance
             UseCase::HealthcareRecords | UseCase::GovernmentClassified | UseCase::PaymentCard => {
@@ -623,16 +622,14 @@ impl UseCaseConfig {
             UseCase::IoTDevice => CoreConfig::new()
                 .with_security_level(SecurityLevel::Medium)
                 .with_performance_preference(PerformancePreference::Memory),
-            UseCase::FirmwareSigning => CoreConfig::new()
-                .with_security_level(SecurityLevel::High),
+            UseCase::FirmwareSigning => CoreConfig::new().with_security_level(SecurityLevel::High),
 
             // Advanced: Specialized requirements
             UseCase::SearchableEncryption => CoreConfig::default(),
             UseCase::HomomorphicComputation => CoreConfig::new()
                 .with_security_level(SecurityLevel::Maximum)
                 .with_hardware_acceleration(true),
-            UseCase::AuditLog => CoreConfig::new()
-                .with_security_level(SecurityLevel::High),
+            UseCase::AuditLog => CoreConfig::new().with_security_level(SecurityLevel::High),
         };
 
         Self {
