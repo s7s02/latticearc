@@ -1,5 +1,5 @@
 #!/bin/bash
-# Pre-commit hook: Format all Rust code before committing
+# Pre-commit hook: Format and verify Rust code before committing
 #
 # To enable this hook, run:
 #   git config core.hooksPath .githooks
@@ -22,6 +22,15 @@ if ! git diff --quiet; then
         fi
     done
     echo "Formatting complete. Staged files updated."
+fi
+
+echo "Running cargo check..."
+
+# Verify code compiles cleanly
+if ! cargo check --workspace --all-features 2>&1; then
+    echo ""
+    echo "Compilation failed! Please fix errors before committing."
+    exit 1
 fi
 
 echo "Pre-commit checks passed."
