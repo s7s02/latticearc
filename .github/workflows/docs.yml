@@ -81,16 +81,24 @@ jobs:
         path: documentation/
 
     - name: Setup Pages
+      id: pages
       uses: actions/configure-pages@v4
+      continue-on-error: true
 
     - name: Upload to GitHub Pages
+      if: steps.pages.outcome == 'success'
       uses: actions/upload-pages-artifact@v3
       with:
         path: documentation/
 
     - name: Deploy to GitHub Pages
+      if: steps.pages.outcome == 'success'
       id: deployment
       uses: actions/deploy-pages@v4
+
+    - name: Pages not configured
+      if: steps.pages.outcome != 'success'
+      run: echo "GitHub Pages not configured. Enable Pages in repo settings to deploy documentation."
 
   docs-check:
     name: Documentation Quality Check
@@ -112,7 +120,7 @@ jobs:
         for crate in primitives latticearc-core hybrid validation utils prelude latticearc zkp perf tls; do
           if [ -f "$crate/README.md" ]; then
             echo "Checking $crate/README.md..."
-            cargo readme --no-title --no-license-header --project-name $crate --manifest-path $crate/Cargo.toml > temp_readme.md
+            cargo readme --no-title --no-license --project-name $crate --manifest-path $crate/Cargo.toml > temp_readme.md
             if ! diff -q "$crate/README.md" temp_readme.md; then
               echo "README.md for $crate is out of sync with Cargo.toml"
               rm temp_readme.md
