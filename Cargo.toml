@@ -11,7 +11,8 @@ members = [
     "arc-prelude",
 ]
 # Exclude fuzz crate from normal workspace builds (requires nightly + specific setup)
-exclude = ["arc-fuzz"]
+# Note: "fuzz" is a symlink to "arc-fuzz" for cargo-fuzz compatibility
+exclude = ["arc-fuzz", "fuzz"]
 resolver = "3"
 
 [workspace.package]
