@@ -554,8 +554,7 @@ impl TlsPolicyEngine {
     pub fn create_config(ctx: &TlsContext) -> TlsConfig {
         let mode = Self::select_with_context(ctx);
 
-        let mut config = TlsConfig::default();
-        config.mode = mode;
+        let mut config = TlsConfig { mode, ..Default::default() };
 
         // Apply performance-related settings based on preference
         match ctx.performance_preference {
