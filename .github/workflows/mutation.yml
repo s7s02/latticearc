@@ -19,6 +19,8 @@ on:
         default: '300'
         type: string
 
+permissions: read-all
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
