@@ -44,12 +44,12 @@ jobs:
 
       - name: Generate SBOM (JSON)
         run: |
-          cargo cyclonedx --all --format json > sbom.cdx.json
+          cargo cyclonedx --all --format json --output-cdx sbom.cdx.json
           echo "Generated CycloneDX SBOM (JSON format)"
 
       - name: Generate SBOM (XML)
         run: |
-          cargo cyclonedx --all --format xml > sbom.cdx.xml
+          cargo cyclonedx --all --format xml --output-cdx sbom.cdx.xml
           echo "Generated CycloneDX SBOM (XML format)"
 
       - name: Validate SBOM
