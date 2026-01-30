@@ -46,6 +46,8 @@ jobs:
         with:
           languages: rust
           queries: security-extended,security-and-quality
+        env:
+          CODEQL_ENABLE_EXPERIMENTAL_FEATURES: true
 
       - name: Build for CodeQL analysis
         run: cargo build --workspace --all-features
