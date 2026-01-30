@@ -21,15 +21,15 @@ jobs:
     name: Documentation Build
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
       with:
         submodules: recursive
 
     - name: Install Rust
-      uses: dtolnay/rust-toolchain@stable
+      uses: dtolnay/rust-toolchain@4be9e76fd7c4901c61fb841f559994984270fce7 # stable
 
     - name: Cache Cargo registry
-      uses: actions/cache@v4
+      uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
       with:
         path: |
           ~/.cargo/registry
@@ -55,7 +55,7 @@ jobs:
         sudo mv mdbook /usr/local/bin/
 
     - name: Upload documentation artifacts
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
       with:
         name: documentation
         path: target/doc/
@@ -77,26 +77,26 @@ jobs:
 
     steps:
     - name: Download documentation
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
       with:
         name: documentation
         path: documentation/
 
     - name: Setup Pages
       id: pages
-      uses: actions/configure-pages@v4
+      uses: actions/configure-pages@1f0c5cde4bc74cd7e1254d0cb4de8d49e9068c7d # v4
       continue-on-error: true
 
     - name: Upload to GitHub Pages
       if: steps.pages.outcome == 'success'
-      uses: actions/upload-pages-artifact@v4
+      uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4
       with:
         path: documentation/
 
     - name: Deploy to GitHub Pages
       if: steps.pages.outcome == 'success'
       id: deployment
-      uses: actions/deploy-pages@v4
+      uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4
 
     - name: Pages not configured
       if: steps.pages.outcome != 'success'
@@ -107,10 +107,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: docs
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
 
     - name: Install Rust
-      uses: dtolnay/rust-toolchain@stable
+      uses: dtolnay/rust-toolchain@4be9e76fd7c4901c61fb841f559994984270fce7 # stable
 
     - name: Install cargo-readme
       run: cargo install cargo-readme
