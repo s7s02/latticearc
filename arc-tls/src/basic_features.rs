@@ -95,10 +95,18 @@ impl SecurePrivateKey {
 
     /// Get reference to the key
     #[must_use]
-    pub fn as_ref(&self) -> &PrivateKeyDer<'static> {
+    pub fn key_ref(&self) -> &PrivateKeyDer<'static> {
         &self.key
     }
+}
 
+impl AsRef<PrivateKeyDer<'static>> for SecurePrivateKey {
+    fn as_ref(&self) -> &PrivateKeyDer<'static> {
+        &self.key
+    }
+}
+
+impl SecurePrivateKey {
     /// Consume and return the key
     #[must_use]
     pub fn into_inner(self) -> PrivateKeyDer<'static> {

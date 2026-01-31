@@ -185,10 +185,18 @@ impl SecureSharedSecret {
 
     /// Get reference to the secret
     #[must_use]
-    pub fn as_ref(&self) -> &[u8] {
+    pub fn secret_ref(&self) -> &[u8] {
         &self.secret
     }
+}
 
+impl AsRef<[u8]> for SecureSharedSecret {
+    fn as_ref(&self) -> &[u8] {
+        &self.secret
+    }
+}
+
+impl SecureSharedSecret {
     /// Consume and return the secret wrapped in Zeroizing for automatic cleanup
     ///
     /// The returned `Zeroizing<Vec<u8>>` will automatically zeroize the secret
