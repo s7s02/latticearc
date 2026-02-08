@@ -15,6 +15,7 @@ concurrency:
 env:
   CARGO_TERM_COLOR: always
   RUST_BACKTRACE: 1
+  RUST_MIN_STACK: 16777216
 
 jobs:
   coverage:
@@ -50,9 +51,9 @@ jobs:
     - name: Generate coverage with llvm-cov
       run: |
         # Generate LCOV format for Codecov
-        cargo llvm-cov --workspace --all-features --lcov --output-path lcov.info
+        cargo llvm-cov --workspace --all-features --release --lcov --output-path lcov.info
         # Generate HTML report separately
-        cargo llvm-cov --workspace --all-features --html
+        cargo llvm-cov --workspace --all-features --release --html
 
     - name: Generate coverage with tarpaulin
       run: |
@@ -105,7 +106,7 @@ jobs:
       run: |
         
         # Generate coverage and check thresholds
-        cargo llvm-cov --workspace --all-features --text --output-file coverage.txt
+        cargo llvm-cov --workspace --all-features --release --text --output-file coverage.txt
         
         # Extract coverage percentage
         COVERAGE=$(grep "Total:" coverage.txt | awk '{print $2}' | sed 's/%//')

@@ -27,7 +27,7 @@ NIST has standardized new quantum-resistant algorithms:
 
 ## Why Hybrid Mode?
 
-LatticeArc defaults to **hybrid cryptography** (PQ + classical) as recommended by [NIST SP 800-227](https://csrc.nist.gov/publications/detail/sp/800-227/draft):
+LatticeArc defaults to **hybrid cryptography** (PQ + classical) as recommended by [NIST SP 800-227](https://csrc.nist.gov/pubs/sp/800/227/final):
 
 > "Organizations may choose to implement hybrid solutions... to provide additional assurance during the transition period."
 
