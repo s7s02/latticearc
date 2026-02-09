@@ -97,7 +97,7 @@ jobs:
       run: |
         
         # Generate coverage and check thresholds
-        cargo llvm-cov --workspace --all-features --release --text --output-file coverage.txt
+        cargo llvm-cov --workspace --all-features --release --text > coverage.txt
         
         # Extract coverage percentage
         COVERAGE=$(grep "Total:" coverage.txt | awk '{print $2}' | sed 's/%//')
