@@ -194,6 +194,16 @@ pub(crate) fn decrypt_aes_gcm_internal(encrypted_data: &[u8], key: &[u8]) -> Res
 /// let encrypted = encrypt_aes_gcm(data, &key, SecurityMode::Unverified)?;
 /// ```
 ///
+/// # Key Requirements
+///
+/// The `key` parameter must be at least 32 bytes for AES-256-GCM.
+/// - If the key is **less than 32 bytes**, an error is returned
+/// - If the key is **exactly 32 bytes**, it is used as-is
+/// - If the key is **greater than 32 bytes**, only the first 32 bytes are used (silently truncated)
+///
+/// For maximum security, always provide exactly 32 bytes. Use a KDF like HKDF
+/// to derive properly-sized keys from other material.
+///
 /// # Errors
 ///
 /// Returns an error if:
@@ -239,6 +249,12 @@ pub fn decrypt_aes_gcm(encrypted_data: &[u8], key: &[u8], mode: SecurityMode) ->
 }
 
 /// Encrypt data using AES-256-GCM with configuration and configurable security mode.
+///
+/// # Key Requirements
+///
+/// The `key` parameter must be at least 32 bytes for AES-256-GCM.
+/// Keys longer than 32 bytes are silently truncated to the first 32 bytes.
+/// For maximum security, provide exactly 32 bytes.
 ///
 /// # Errors
 ///
@@ -290,6 +306,11 @@ pub fn decrypt_aes_gcm_with_config(
 /// is not required or not possible. For verified operations, use
 /// `encrypt_aes_gcm(data, key, SecurityMode::Verified(&session))`.
 ///
+/// # Key Requirements
+///
+/// The `key` must be at least 32 bytes. Keys longer than 32 bytes are
+/// truncated to the first 32 bytes. Provide exactly 32 bytes for clarity.
+///
 /// # Errors
 ///
 /// Returns an error if:
@@ -322,6 +343,11 @@ pub fn decrypt_aes_gcm_unverified(encrypted_data: &[u8], key: &[u8]) -> Result<V
 ///
 /// This is an opt-out function for scenarios where Zero Trust verification
 /// is not required or not possible.
+///
+/// # Key Requirements
+///
+/// The `key` must be at least 32 bytes. Keys longer than 32 bytes are
+/// truncated to the first 32 bytes. Provide exactly 32 bytes for clarity.
 ///
 /// # Errors
 ///

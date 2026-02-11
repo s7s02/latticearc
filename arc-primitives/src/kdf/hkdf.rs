@@ -58,8 +58,27 @@ impl HkdfResult {
 ///
 /// Per RFC 5869: `PRK = HMAC-Hash(salt, IKM)`
 ///
+/// # Security
+///
+/// ⚠️ **Salt Usage:** While RFC 5869 permits a zero salt (which this implementation
+/// uses when `salt` is `None`), you **SHOULD** provide a random salt for maximum
+/// security. A random salt ensures that even if the same input key material (IKM)
+/// is used multiple times, the derived keys will be different.
+///
+/// **Best Practice:** Generate a random salt using a cryptographically secure RNG:
+/// ```ignore
+/// use rand::RngCore;
+/// let mut salt = [0u8; 32];
+/// rand::rngs::OsRng.fill_bytes(&mut salt);
+/// let prk = hkdf_extract(Some(&salt), ikm)?;
+/// ```
+///
+/// If salt is `None`, a string of 32 zero bytes is used (per RFC 5869 Section 2.2).
+/// This is acceptable for scenarios where the IKM already has sufficient entropy and
+/// is never reused, but random salts provide defense-in-depth.
+///
 /// # Arguments
-/// * `salt` - Optional salt value. Use empty slice or None if not available. Recommended to be random.
+/// * `salt` - Optional salt value. **Strongly recommended** to provide a random 32-byte salt.
 /// * `ikm` - Input keying material (the secret to derive from)
 ///
 /// # Returns
@@ -68,8 +87,8 @@ impl HkdfResult {
 /// # Example
 /// ```ignore
 /// let ikm = b"secret input key material";
-/// let salt = b"random salt";
-/// let prk = hkdf_extract(salt, ikm)?;
+/// let salt = b"random salt value for maximum security";
+/// let prk = hkdf_extract(Some(salt), ikm)?;
 /// ```
 ///
 /// # Errors

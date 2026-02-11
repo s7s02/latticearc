@@ -340,7 +340,8 @@ impl KeyLifecycleRecord {
     }
 
     /// Add an approver to the key
-    pub fn add_approver(&mut self, approver_id: String) {
+    pub fn add_approver(&mut self, approver_id: impl Into<String>) {
+        let approver_id = approver_id.into();
         if !self.approvers.contains(&approver_id) {
             self.approvers.push(approver_id);
         }

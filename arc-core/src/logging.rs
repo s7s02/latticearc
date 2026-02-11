@@ -477,12 +477,12 @@ pub fn generate_lightweight_correlation_id() -> String {
 /// ```rust
 /// use arc_core::logging::{set_correlation_id, current_correlation_id};
 ///
-/// set_correlation_id("request-12345".to_string());
+/// set_correlation_id("request-12345");
 /// assert_eq!(current_correlation_id(), Some("request-12345".to_string()));
 /// ```
-pub fn set_correlation_id(id: String) {
+pub fn set_correlation_id(id: impl Into<String>) {
     CORRELATION_ID.with(|cell| {
-        *cell.borrow_mut() = Some(id);
+        *cell.borrow_mut() = Some(id.into());
     });
 }
 
@@ -615,7 +615,7 @@ impl CorrelationGuard {
     ///
     /// A new `CorrelationGuard` that sets and manages the correlation ID.
     #[must_use]
-    pub fn with_id(id: String) -> Self {
+    pub fn with_id(id: impl Into<String>) -> Self {
         let previous = current_correlation_id();
         set_correlation_id(id);
         Self { previous }
