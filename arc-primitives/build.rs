@@ -5,6 +5,10 @@
 //! Section 9.2.2 (Software/Firmware Load Test).
 
 #![allow(missing_docs)] // Build scripts don't need public API docs
+#![allow(clippy::arithmetic_side_effects)] // Build scripts can use arithmetic
+#![allow(clippy::print_stderr)] // Build scripts use eprintln for cargo warnings
+#![allow(clippy::manual_let_else)] // Build scripts can use if-let patterns
+#![allow(clippy::panic)] // Build scripts can panic - they run at compile time
 
 use std::env;
 use std::fs;
@@ -14,7 +18,10 @@ fn main() {
     println!("cargo:rerun-if-changed=build.rs");
     println!("cargo:rerun-if-changed=src/");
 
-    let out_dir = PathBuf::from(env::var("OUT_DIR").expect("OUT_DIR not set"));
+    let Ok(out_dir_str) = env::var("OUT_DIR") else {
+        panic!("OUT_DIR not set");
+    };
+    let out_dir = PathBuf::from(out_dir_str);
     let integrity_file = out_dir.join("integrity_hmac.rs");
 
     // Check if a production HMAC file exists (generated externally)
@@ -22,16 +29,15 @@ fn main() {
 
     let hmac_code = if production_hmac_path.exists() {
         // Production mode: Read pre-computed HMAC
-        match load_production_hmac(&production_hmac_path) {
-            Some(code) => code,
-            None => generate_development_mode(),
-        }
+        load_production_hmac(&production_hmac_path).unwrap_or_else(generate_development_mode)
     } else {
         // Development mode: No pre-computed HMAC
         generate_development_mode()
     };
 
-    fs::write(&integrity_file, hmac_code).expect("Failed to write integrity_hmac.rs");
+    fs::write(&integrity_file, &hmac_code).unwrap_or_else(|_| {
+        panic!("Failed to write integrity_hmac.rs");
+    });
 
     println!("cargo:rerun-if-changed={}", production_hmac_path.display());
 }
@@ -57,13 +63,13 @@ fn load_production_hmac(path: &PathBuf) -> Option<String> {
     // Parse hex string into bytes
     let mut hmac_bytes = Vec::new();
     for i in (0..hmac_hex.len()).step_by(2) {
-        match u8::from_str_radix(&hmac_hex[i..i + 2], 16) {
-            Ok(byte) => hmac_bytes.push(byte),
-            Err(_) => {
-                eprintln!("cargo:warning=Invalid hex in PRODUCTION_HMAC.txt at position {}", i);
-                return None;
-            }
-        }
+        let byte = if let Ok(byte) = u8::from_str_radix(&hmac_hex[i..i + 2], 16) {
+            byte
+        } else {
+            eprintln!("cargo:warning=Invalid hex in PRODUCTION_HMAC.txt at position {}", i);
+            return None;
+        };
+        hmac_bytes.push(byte);
     }
 
     Some(format!("pub const EXPECTED_HMAC: Option<&[u8]> = Some(&{:?});", hmac_bytes))

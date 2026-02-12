@@ -888,19 +888,19 @@ pub fn integrity_test() -> Result<()> {
 
     // If no expected HMAC is configured, we're in development mode
     // Log a warning but don't fail (to allow testing during development)
-    let expected_hmac = match expected_hmac {
-        Some(hmac) => hmac,
-        None => {
-            // Development mode: Log the computed HMAC for future use
+    let Some(expected_hmac) = expected_hmac else {
+        // Development mode: Log the computed HMAC for future use
+        #[allow(clippy::print_stderr)] // Development mode diagnostic output
+        {
             eprintln!("⚠️  FIPS Integrity Test: Development mode");
             eprintln!("   Expected HMAC not configured. Computed HMAC:");
             eprintln!("   {:02x?}", computed_hmac.as_slice());
             eprintln!("   This should be configured in production builds.");
-
-            // In development, accept any HMAC (but log it)
-            // For production FIPS builds, this should return an error
-            return Ok(());
         }
+
+        // In development, accept any HMAC (but log it)
+        // For production FIPS builds, this should return an error
+        return Ok(());
     };
 
     // Constant-time comparison using subtle crate
