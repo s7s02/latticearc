@@ -22,7 +22,8 @@
 #![allow(clippy::explicit_iter_loop)] // Benchmark iteration clarity
 #![allow(clippy::expect_used)] // Benchmark setup with known-valid data
 
-use criterion::{BenchmarkId, Criterion, black_box, criterion_group, criterion_main};
+use criterion::{BenchmarkId, Criterion, criterion_group, criterion_main};
+use std::hint::black_box;
 use subtle::ConstantTimeEq;
 
 /// Test that constant-time comparison doesn't leak position of difference

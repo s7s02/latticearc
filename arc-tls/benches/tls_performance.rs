@@ -19,7 +19,8 @@ use arc_core::SecurityLevel;
 use arc_tls::pq_key_exchange::PqKexMode;
 use arc_tls::tls13;
 use arc_tls::*;
-use criterion::{Criterion, black_box, criterion_group, criterion_main};
+use criterion::{Criterion, criterion_group, criterion_main};
+use std::hint::black_box;
 
 /// Benchmark TLS configuration creation
 fn bench_tls_config_creation(c: &mut Criterion) {
